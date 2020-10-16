@@ -7,6 +7,8 @@ Vue.use(Vuex);
 export default new Vuex.Store({
   state: {
     users: userData.users,
+    // sortButtons - логичнее все ж в компоненте хранить
+    // vuex для общего состояния приложения
     sortButtons: [
       {
         title: 'Дата регистрации',
@@ -42,12 +44,23 @@ export default new Vuex.Store({
       state.users = upd;
     },
     sortUsers(state, { upd, id, sortTo }) {
+      // сортировка должна быть не mutations,
+      // их назначение - запись данных.
+      // Тогда уж в actions
+
+      // раз есть пагинация - сортировка должна ее учитывать
+      // и сортировать внутри текущей страницы
+      // сейчас наприер при сортировке по сумме взноса
+      // пользователь с макс. суммой может быть на странице 2,
+      // а при сортировке внезавно оказаться на первой странице
       const sortNum = () => {
         const updUsers = state.users.sort((a, b) => a[id] - b[id]);
         if (sortTo) updUsers.reverse();
         state.sortButtons = upd;
         state.users = updUsers;
       };
+      // о том как хранить дату я написал ниже
+      // такая сортировка по дате на редкость не оптимальна
       const sortDate = () => {
         const updUsers = state.users.sort((a, b) => {
           let aa = a[id].split('.');
@@ -86,15 +99,35 @@ export default new Vuex.Store({
     },
     addUser(context, user) {
       const id = context.state.users.length + 1;
+      // "дешевле" было бы написать
+      // user.date = new Date(user.date).toLocaleDateString(),
+      // чем
+      //  ...user,
+      //  date: new Date(user.date).toLocaleDateString(),
+
+      // Еще лучше хранить дату как дату, и форматировать при выводе, а не в хранилище.
+      // Тогда и функция sortDate была бы намного проще и короче.
+      // ее вообще можно было бы не создавать - сравнивая дату как timestamp
+      // в функции sortNum.
       const upd = [...context.state.users, {
         ...user,
         id,
+        // не ошибка, но всегда полагаться на toLocaleDateString не стоит.
+        // Могут быть сюрпризы, например в safari
         date: new Date(user.date).toLocaleDateString(),
         registration: new Date(user.registration).toLocaleDateString(),
       }];
       context.commit('addUser', upd);
 
       const lStore = JSON.parse(localStorage.getItem('charity-run-app'));
+      // если вынести сохраняемые данные в переменную можно избежать дублирования кода
+      // let upd = { ...user, id: `by-user${id}` }
+      // if (lStore) {
+      //   localStorage.setItem('charity-run-app', JSON.stringify([...lStore, upd]));
+      // } else {
+      //   localStorage.setItem('charity-run-app', JSON.stringify([upd]));
+      // }
+
       if (lStore) {
         const updlStore = [...lStore, { ...user, id: `by-user${id}` }];
         localStorage.setItem('charity-run-app', JSON.stringify(updlStore));

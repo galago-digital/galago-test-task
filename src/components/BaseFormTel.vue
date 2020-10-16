@@ -49,8 +49,10 @@ export default {
       const { pattern } = this.currentMask;
       const test = pattern.test(numbers);
       if (!test) {
+        // я не до конца вввел номер, прешел к другому полю -
+        // и поле с номером очистилось. Зачем? Вместо исправления надо вводить заново
         this.$emit('input', '');
-        this.currentMask = defaultMask;
+        this.currentMask = defaultMask; // а это тут лишнее
       } else {
         this.$emit('input', numbers);
       }

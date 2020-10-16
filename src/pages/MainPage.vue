@@ -27,7 +27,8 @@
         :buttons-table="this.sortButtons"
         :sort-table="this.getSort"
         />
-
+        <!-- this.countUsers > this.usersPerPage - подобные вещи лучше выносить
+        в computed -->
         <AppPagination v-if="this.countUsers > this.usersPerPage"
         v-model='page'
         :page="page"
@@ -37,7 +38,9 @@
         />
     </div>
     <component :is="'style'" v-if="isIE10">
-
+      <!-- justify-content: flex-start !important;
+      - это ничем не поможет в IE10, он только синтаксис 2012 года понимает
+        -->
       .headers__item {
        display: flex !important;
        justify-content: flex-start !important;

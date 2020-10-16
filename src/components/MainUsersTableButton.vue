@@ -20,6 +20,10 @@ export default {
   name: 'MainUsersTableButton',
   props: ['param', 'sortTable'],
   computed: {
+    // computed не используются для такого, здесь нет никаких вычислений,
+    // только вывод ключей объекта из props
+    // если в template написать {{ this.param.title }} и не использовать computed
+    // как сейчас в целом код будет короче
     title() {
       return this.param.title;
     },

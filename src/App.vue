@@ -8,6 +8,7 @@
 import MainPage from '@/pages/MainPage.vue';
 
 export default {
+  // компонент MainPage избыточен, т.к. здесь одна страница и есть
   name: 'App',
   components: {
     MainPage,
@@ -30,6 +31,12 @@ export default {
 }
 :focus,:active{outline: none;}
 a:focus,a:active{outline: none;}
+/*
+nav,footer,header,aside{display: block;}
+имеет смысл для древних браузеров, не знающих этих элементов,
+но тогда надо позаботится и fallback для display: flex - а этого нет.
+Так что смысл теряется.
+*/
 nav,footer,header,aside{display: block;}
 html,body{
   height: 100vh;

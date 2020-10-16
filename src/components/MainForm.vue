@@ -1,3 +1,4 @@
+/* eslint-disable max-len */
 <template>
   <div class="run__form-container">
      <form class="run__form" @submit.prevent="sendForm">
@@ -34,9 +35,15 @@
        </div>
 
        <transition-group name="fade">
+       <!-- не понятно для чего  button внутри transition-group
+       это никак не влияет на ее внешний вид. transition-group тут лишнее.
+       Такая :key="1" запись атрибута предполагает динамическое содержимое, здесь его нет.
+       -->
        <button class="form__submit" :key="1"
        :disabled="buttonIsDisabled" type="submit" name="button">Отправить заявку</button>
 
+       <!-- когда участник добавлен форма сбрасывается,
+       а текст "Вы попали в список участников ✓" - остается -->
        <span v-show="userAdded" class="form__success" :key="2">
          Вы попали в список участников ✓
        </span>
@@ -191,7 +198,7 @@ export default {
     top: 0;
     right: 30px;
   }
-
+  /* Стили для анимации дублируются. Чтобы избежать этого можно вынести в родительский компонент. */
   .fade-enter, .fade-leave-to {
     opacity: 0;
     transform: translateX(-120%);

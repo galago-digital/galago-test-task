@@ -115,6 +115,11 @@ export default {
     border-bottom: 8px solid #C4C4C4;
   }
   .header__btn-sort.largest:before {
+    /*
+    тут и везде в .header__btn-sort дублироввание кода
+    с классом largest отличие только цвет border
+    поэтому достаточно указать border-color:  #0086F8
+    */
     top: 60%;
     border-top: 8px solid #0086F8;
   }
